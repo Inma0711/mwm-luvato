@@ -65,3 +65,4 @@ Este plugin está licenciado bajo GPL v2 o posterior.
 - Estructura básica implementada
 - Hooks de activación/desactivación
 - Soporte para scripts y estilos
+

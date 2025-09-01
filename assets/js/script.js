@@ -106,3 +106,4 @@
     window.MWMLuvato = MWMLuvato;
     
 })(jQuery);
+
