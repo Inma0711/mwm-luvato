@@ -15,9 +15,6 @@
         init: function() {
             this.bindEvents();
             this.setupQuantityCapture();
-            
-            // Agregar banner de prueba visible
-            this.addTestBanner();
         },
         
         // Vincular eventos
@@ -189,35 +186,9 @@
             return packQuantity;
         },
         
-        // Agregar banner de prueba visible
-        addTestBanner: function() {
-            // Crear banner de prueba
-            var $banner = $('<div class="mwm-test-banner" style="position: fixed; top: 0; left: 0; right: 0; background: #ff6b6b; color: white; padding: 10px; text-align: center; z-index: 9999; font-weight: bold; font-size: 16px;">🚀 MWM LUVATO PLUGIN ACTIVO - Pack: <span id="mwm-pack-display">1</span> 🚀</div>');
-            
-            // Agregar al body
-            $('body').prepend($banner);
-            
-            // Agregar botón de prueba
-            var $testButton = $('<div class="mwm-test-button" style="position: fixed; top: 60px; right: 20px; background: #28a745; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer; z-index: 9999; font-weight: bold;">🧮 ACTUALIZAR MULTIPLICACIÓN</div>');
-            $('body').append($testButton);
-            
-            // Vincular clic del botón
-            $testButton.on('click', function() {
-                MWMPriceMultiplier.updateVisualMultiplication();
-                console.log('MWM Luvato: Botón de prueba clickeado');
-            });
-            
-            // Actualizar valor del pack
-            this.updatePackDisplay();
-            
-            console.log('MWM Luvato: Banner de prueba y botón agregados');
-        },
+
         
-        // Actualizar display del pack
-        updatePackDisplay: function() {
-            var packQuantity = this.getPackQuantity();
-            $('#mwm-pack-display').text(packQuantity);
-        },
+
         
         // Agregar campo oculto con cantidad de pack
         addPackQuantityField: function($element, packQuantity) {
@@ -275,9 +246,6 @@
         handleQuantityChange: function(e) {
             var $input = $(this);
             console.log('MWM Luvato: Cambio detectado en selector:', $input.val());
-            
-            // Solo actualizar banner del pack, NO la multiplicación visual
-            this.updatePackDisplay();
         },
         
         // Manejar cambios específicos en selectores de productos
@@ -309,28 +277,11 @@
             console.log('MWM Luvato: Producto:', productQuantity, '× Pack:', packQuantity, '= Resultado:', multipliedQuantity);
             
             // Buscar el contenedor del producto para mostrar la multiplicación
-            var $container = $productInput.closest('.option-add-to-cart');
-            if ($container.length > 0) {
-                // Crear o actualizar el indicador de multiplicación
-                var $multiplierIndicator = $container.find('.mwm-multiplier-indicator');
-                if ($multiplierIndicator.length === 0) {
-                    $multiplierIndicator = $('<div class="mwm-multiplier-indicator"></div>');
-                    $container.append($multiplierIndicator);
-                }
-                
-                // Mostrar la multiplicación CORRECTA
-                $multiplierIndicator.html(
-                    '<span class="mwm-calculation">' + 
-                    '<strong>' + productQuantity + ' × ' + packQuantity + ' = ' + multipliedQuantity + '</strong>' +
-                    '</span>'
-                );
-                
-                // Actualizar el valor mostrado en el input (solo visual, no el valor real)
-                $productInput.attr('data-original-value', productQuantity);
-                $productInput.attr('data-multiplied-value', multipliedQuantity);
-                
-                console.log('MWM Luvato: Multiplicación visual actualizada para producto');
-            }
+            // Actualizar el valor mostrado en el input (solo visual, no el valor real)
+            $productInput.attr('data-original-value', productQuantity);
+            $productInput.attr('data-multiplied-value', multipliedQuantity);
+            
+            console.log('MWM Luvato: Multiplicación visual actualizada para producto');
             
             // ACTUALIZAR EL WIDGET DEL CARRITO
             this.updateCartWidgetQuantity($productInput, productQuantity, packQuantity, multipliedQuantity);

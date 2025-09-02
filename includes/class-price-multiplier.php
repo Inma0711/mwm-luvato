@@ -249,13 +249,7 @@ class MWM_Price_Multiplier {
             
             error_log("MWM Luvato: Mostrando cantidad multiplicada en nombre - Original: {$original_qty}, Pack: {$pack_qty}, Final: {$final_qty}");
             
-            // Agregar información de multiplicación al nombre
-            $name .= sprintf(
-                ' <span class="mwm-multiplication-info" style="color: #ff6b6b; font-weight: bold;">(%s × %s = %s)</span>',
-                esc_html($original_qty),
-                esc_html($pack_qty),
-                esc_html($final_qty)
-            );
+
         }
         
         return $name;
