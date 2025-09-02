@@ -1,68 +1,145 @@
-# MWM Luvato Plugin
+# MWM Luvato - Multiplicador de Precios
 
-Plugin personalizado para WordPress desarrollado para Luvato con funcionalidades específicas.
+## 🎯 **Descripción de la Funcionalidad**
 
-## Descripción
+Este plugin implementa un sistema de multiplicación de cantidades que funciona de la siguiente manera:
 
-Este plugin proporciona funcionalidades personalizadas para el sitio web de Luvato, incluyendo características específicas del negocio y mejoras en la experiencia del usuario.
+### **Lógica de Multiplicación:**
+```
+Cantidad Final = Cantidad del Producto × Cantidad del Pack (Selector General)
+```
 
-## Características
+### **Ejemplo:**
+- **Selector del Producto:** "Deurgreep antraciet" = 3 unidades
+- **Selector General (Pack):** = 2 
+- **Resultado Final:** 3 × 2 = **6 unidades** en el carrito
 
-- Estructura de plugin profesional y bien organizada
-- Hooks de activación y desactivación
-- Soporte para internacionalización
-- Gestión de scripts y estilos
-- Compatible con WordPress 5.0+
+## 🚀 **Cómo Funciona**
 
-## Requisitos
+### **1. Interceptación del Proceso:**
+- El plugin se activa **antes** de añadir productos al carrito
+- Utiliza el hook `woocommerce_add_to_cart_validation` con prioridad 60
+- Intercepta tanto botones como formularios de añadir al carrito
 
-- WordPress 5.0 o superior
-- PHP 7.4 o superior
+### **2. Captura de Cantidades:**
+- **JavaScript:** Captura la cantidad del selector general (pack)
+- **PHP:** Recibe esta cantidad y la multiplica por la cantidad del producto
+- **Resultado:** Modifica la cantidad antes de procesar el carrito
 
-## Instalación
+### **3. Visualización en el Carrito:**
+- Muestra la cantidad multiplicada en el carrito
+- Incluye tooltip que muestra la multiplicación (ej: "3 × 2 = 6")
+- Estilos visuales para identificar productos multiplicados
 
-1. Sube la carpeta `mwm-luvato` al directorio `/wp-content/plugins/` de tu instalación de WordPress
-2. Activa el plugin a través del menú 'Plugins' en WordPress
-3. El plugin se activará automáticamente
-
-## Uso
-
-Una vez activado, el plugin funcionará automáticamente. Puedes personalizar las funcionalidades editando el archivo principal `mwm-luvato.php`.
-
-## Estructura del Plugin
+## 📁 **Estructura de Archivos**
 
 ```
 mwm-luvato/
-├── mwm-luvato.php      # Archivo principal del plugin
-├── README.md           # Este archivo
-├── .git/               # Control de versiones
-└── assets/             # Carpeta para CSS, JS e imágenes (opcional)
-    ├── css/
-    ├── js/
-    └── images/
+├── includes/
+│   ├── class-price-multiplier.php    # Lógica principal PHP
+│   └── index.php                     # Protección de directorio
+├── assets/
+│   ├── css/
+│   │   ├── style.css                 # Estilos generales
+│   │   └── price-multiplier.css      # Estilos del multiplicador
+│   └── js/
+│       ├── script.js                 # JavaScript general
+│       └── price-multiplier.js      # JavaScript del multiplicador
+└── mwm-luvato.php                    # Archivo principal del plugin
 ```
 
-## Personalización
+## 🔧 **Hooks Implementados**
 
-Para agregar nuevas funcionalidades:
+### **PHP Hooks:**
+- `woocommerce_add_to_cart_validation` (prioridad 60)
+- `woocommerce_add_cart_item_data` (prioridad 10)
+- `woocommerce_cart_item_quantity` (prioridad 10)
 
-1. Edita la clase `MWM_Luvato_Plugin` en `mwm-luvato.php`
-2. Agrega nuevos hooks y métodos según sea necesario
-3. Crea archivos adicionales para organizar mejor el código
+### **JavaScript Events:**
+- Clic en botones de añadir al carrito
+- Envío de formularios de carrito
+- Cambios en selectores de cantidad de pack
 
-## Soporte
+## 🎨 **Clases CSS Utilizadas**
 
-Para soporte técnico, contacta al equipo de MWM.
+### **Para Cantidades Multiplicadas:**
+- `.mwm-quantity-display` - Cantidad final mostrada
+- `.mwm-multiplier-active` - Indicador visual de multiplicación activa
 
-## Licencia
+### **Para Debugging:**
+- `.mwm-debug-info` - Información de debugging
+- `.mwm-debug-item` - Elementos individuales de debug
 
-Este plugin está licenciado bajo GPL v2 o posterior.
+## 🧪 **Testing y Debugging**
 
-## Changelog
+### **Console JavaScript:**
+```javascript
+// Ver información de debugging
+MWMPriceMultiplier.debug();
 
-### Versión 1.0.0
-- Lanzamiento inicial del plugin
-- Estructura básica implementada
-- Hooks de activación/desactivación
-- Soporte para scripts y estilos
+// Ver cantidad de pack actual
+console.log('Pack Quantity:', MWMPriceMultiplier.getPackQuantity());
+```
 
+### **Logs PHP:**
+- Los logs se escriben en `error_log` de WordPress
+- Formato: `MWM Luvato: Cantidad multiplicada - Original: X, Pack: Y, Resultado: Z`
+
+## 📋 **Requisitos del Sistema**
+
+### **WordPress:**
+- Versión mínima: 5.0
+- WooCommerce activo
+
+### **Plugins Compatibles:**
+- YITH WooCommerce Advanced Product Options Premium
+- Cualquier plugin que use hooks estándar de WooCommerce
+
+### **PHP:**
+- Versión mínima: 7.4
+- Extensión `session` habilitada (opcional)
+
+## 🔄 **Flujo de Funcionamiento**
+
+1. **Usuario selecciona cantidades:**
+   - Cantidad del producto específico
+   - Cantidad del pack (selector general)
+
+2. **Usuario hace clic en "Añadir al carrito":**
+   - JavaScript captura la cantidad del pack
+   - Se envía como campo oculto `pack_quantity`
+
+3. **Plugin intercepta la acción:**
+   - Hook `woocommerce_add_to_cart_validation`
+   - Calcula: cantidad_producto × cantidad_pack
+   - Modifica la cantidad antes del procesamiento
+
+4. **Resultado en el carrito:**
+   - Se muestra la cantidad multiplicada
+   - Tooltip muestra la operación matemática
+   - Estilos visuales identifican la multiplicación
+
+## 🚨 **Consideraciones Importantes**
+
+### **Compatibilidad:**
+- Funciona con cualquier plugin que respete los hooks de WooCommerce
+- No interfiere con la funcionalidad existente de YITH WAPO
+- Prioridad 60 asegura que se ejecute después de la validación principal
+
+### **Rendimiento:**
+- Solo se activa cuando hay cantidad de pack > 1
+- No afecta productos sin multiplicación
+- Logs de debugging se pueden deshabilitar en producción
+
+### **Seguridad:**
+- Validación de tipos de datos
+- Sanitización de entradas
+- Prevención de acceso directo a archivos
+
+## 🔮 **Futuras Mejoras**
+
+- [ ] Panel de administración para configuraciones
+- [ ] Historial de multiplicaciones
+- [ ] Reglas personalizadas de multiplicación
+- [ ] Integración con sistemas de inventario
+- [ ] Reportes de ventas con multiplicaciones

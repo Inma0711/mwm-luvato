@@ -62,14 +62,8 @@ class MWM_Luvato_Plugin {
         // Cargar multiplicador de precios
         require_once MWM_LUVATO_PLUGIN_DIR . 'includes/class-price-multiplier.php';
         
-        // Cargar helper de debugging
-        require_once MWM_LUVATO_PLUGIN_DIR . 'includes/class-debug-helper.php';
-        
         // Inicializar multiplicador de precios
         new MWM_Price_Multiplier();
-        
-        // Inicializar helper de debugging
-        new MWM_Debug_Helper();
     }
     
     /**
@@ -107,14 +101,8 @@ class MWM_Luvato_Plugin {
      * Cargar scripts y estilos
      */
     public function enqueue_scripts() {
-        // Cargar estilos CSS principales
-        wp_enqueue_style('mwm-luvato-style', MWM_LUVATO_PLUGIN_URL . 'assets/css/style.css', array(), MWM_LUVATO_VERSION);
-        
         // Cargar estilos CSS del multiplicador de precios
         wp_enqueue_style('mwm-luvato-price-multiplier', MWM_LUVATO_PLUGIN_URL . 'assets/css/price-multiplier.css', array(), MWM_LUVATO_VERSION);
-        
-        // Cargar JavaScript principal
-        wp_enqueue_script('mwm-luvato-script', MWM_LUVATO_PLUGIN_URL . 'assets/js/script.js', array('jquery'), MWM_LUVATO_VERSION, true);
         
         // Cargar JavaScript del multiplicador de precios
         wp_enqueue_script('mwm-luvato-price-multiplier', MWM_LUVATO_PLUGIN_URL . 'assets/js/price-multiplier.js', array('jquery'), MWM_LUVATO_VERSION, true);
